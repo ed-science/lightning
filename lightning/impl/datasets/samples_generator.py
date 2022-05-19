@@ -26,7 +26,7 @@ def _make_nn_regression(n_samples=100, n_features=100, n_informative=10,
 
     n = 0
     ind = np.arange(n_features)
-    for i in range(n_samples):
+    for _ in range(n_samples):
         generator.shuffle(ind)
         col[n:n+n_informative] = ind[:n_informative]
         n += n_informative
@@ -220,11 +220,11 @@ def make_classification(n_samples=100, n_features=20, n_informative=2,
         weights = [1.0 / n_classes] * n_classes
         weights[-1] = 1.0 - sum(weights[:-1])
 
-    n_samples_per_cluster = []
+    n_samples_per_cluster = [
+        int(n_samples * weights[k % n_classes] / n_clusters_per_class)
+        for k in range(n_clusters)
+    ]
 
-    for k in range(n_clusters):
-        n_samples_per_cluster.append(int(n_samples * weights[k % n_classes]
-                                     / n_clusters_per_class))
 
     for i in range(n_samples - sum(n_samples_per_cluster)):
         n_samples_per_cluster[i % n_clusters] += 1

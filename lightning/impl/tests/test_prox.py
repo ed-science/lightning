@@ -13,7 +13,7 @@ def test_tv1_denoise():
     n_features = 100
 
     # repeat the test 10 times
-    for nrun in range(10):
+    for _ in range(10):
         x = np.random.randn(n_features)
         for _ in range(n_iter):
             prox_fast.prox_tv1d(x, 1.0)

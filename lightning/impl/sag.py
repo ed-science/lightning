@@ -30,15 +30,14 @@ class _BaseSAG(object):
         return losses[self.loss]
 
     def _get_penalty(self):
-        if isinstance(self.penalty, str):
-            # l2 penalty is governed by the alpha keyword in `_sag_fit`.
-            # beta governs the strength of the penalties below.
-            penalties = {
-                "l1": L1Penalty(),
-            }
-            return penalties[self.penalty]
-        else:
+        if not isinstance(self.penalty, str):
             return self.penalty
+        # l2 penalty is governed by the alpha keyword in `_sag_fit`.
+        # beta governs the strength of the penalties below.
+        penalties = {
+            "l1": L1Penalty(),
+        }
+        return penalties[self.penalty]
 
     def _finalize_coef(self):
         self.coef_ *= self.coef_scale_
@@ -61,11 +60,8 @@ class _BaseSAG(object):
             if self.verbose > 0:
                 print("Auto stepsize: %s" % self.eta)
             if self.eta == 'line-search':
-                self.eta = step_size
                 adaptive_step_size = True
-            else:
-                self.eta = step_size
-
+            self.eta = step_size
         loss = self._get_loss()
         penalty = self._get_penalty()
         n_vectors = Y.shape[1]
@@ -291,7 +287,7 @@ class SAGRegressor(BaseRegressor, _BaseSAG):
             raise ValueError('Penalties are not supported in SAGRegressor. '
                              'Please use SAGARegressor instead.')
         self.outputs_2d_ = len(y.shape) > 1
-        Y = y.reshape(-1, 1) if not self.outputs_2d_ else y
+        Y = y if self.outputs_2d_ else y.reshape(-1, 1)
         Y = Y.astype(np.float64)
         return self._fit(X, Y, sample_weight=sample_weight)
 

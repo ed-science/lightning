@@ -73,7 +73,7 @@ for eta in etas:
     clf = SVRGClassifier(loss="squared_hinge", alpha=1e-5, eta=eta,
                          n_inner=1.0, max_iter=20, random_state=0, callback=cb)
     clf.fit(X, y)
-    plt.plot(cb.times, cb.obj, label="eta=" + str(eta))
+    plt.plot(cb.times, cb.obj, label=f"eta={str(eta)}")
 
 plt.xlabel("CPU time")
 plt.ylabel("Objective value")
@@ -88,7 +88,7 @@ for n_inner in n_inners:
                          n_inner=n_inner, max_iter=20, random_state=0,
                          callback=cb)
     clf.fit(X, y)
-    plt.plot(cb.times, cb.obj, label="n_inner=" + str(n_inner))
+    plt.plot(cb.times, cb.obj, label=f"n_inner={str(n_inner)}")
 
 plt.xlabel("CPU time")
 plt.ylabel("Objective value")

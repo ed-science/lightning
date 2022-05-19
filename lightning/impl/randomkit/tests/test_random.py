@@ -6,7 +6,7 @@ from lightning.impl.randomkit import RandomState
 
 def test_randint():
     rs = RandomState(seed=0)
-    vals = [rs.randint(10) for t in range(10000)]
+    vals = [rs.randint(10) for _ in range(10000)]
     np.testing.assert_almost_equal(np.mean(vals), 5.018)
 
 

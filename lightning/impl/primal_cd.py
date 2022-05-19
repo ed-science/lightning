@@ -47,13 +47,9 @@ class _BaseCD(object):
 
     def _get_max_steps(self):
         if self.max_steps == "auto":
-            if self.loss == "log":
-                max_steps = 0
-            else:
-                max_steps = 30
+            return 0 if self.loss == "log" else 30
         else:
-            max_steps = self.max_steps
-        return max_steps
+            return self.max_steps
 
     def _get_penalty(self):
         penalties = {
@@ -63,10 +59,10 @@ class _BaseCD(object):
         return penalties[self.penalty]
 
     def _init_errors(self, Y):
-        n_samples, n_vectors = Y.shape
         if self.loss == "squared":
             self.errors_ = -Y.T
         else:
+            n_samples, n_vectors = Y.shape
             self.errors_ = np.ones((n_vectors, n_samples), dtype=np.float64)
 
 
@@ -320,7 +316,7 @@ class CDClassifier(_BaseCD, BaseClassifier):
             self.errors_ = np.asarray(errors)
 
             for k in range(n_vectors):
-                if self.warm_start and not k in self.violation_init_:
+                if self.warm_start and k not in self.violation_init_:
                     self.violation_init_[k] = viol[k]
 
         if self.debiasing:
@@ -435,10 +431,7 @@ class CDRegressor(_BaseCD, BaseRegressor):
         n_features = ds.get_n_features()
 
         self.outputs_2d_ = len(y.shape) == 2
-        if self.outputs_2d_:
-            Y = y
-        else:
-            Y = y.reshape(-1, 1)
+        Y = y if self.outputs_2d_ else y.reshape(-1, 1)
         Y = np.asfortranarray(Y, dtype=np.float64)
         y = np.empty(0, dtype=np.int32)
         n_vectors = Y.shape[1]
@@ -489,7 +482,7 @@ class CDRegressor(_BaseCD, BaseRegressor):
             self.coef_ = np.asarray(self.coef_)
             self.error_ = np.asarray(self.error_)
 
-            if self.warm_start and not n_vectors in self.violation_init_:
+            if self.warm_start and n_vectors not in self.violation_init_:
                 self.violation_init_[n_vectors] = viol
 
         return self

@@ -61,8 +61,7 @@ class Callback(object):
 
 @pytest.fixture(scope='module')
 def callback(bin_train_data):
-    cb = Callback(*bin_train_data)
-    return cb
+    return Callback(*bin_train_data)
 
 
 def _fit_sag(X, y, eta, alpha, loss, max_iter, rng):

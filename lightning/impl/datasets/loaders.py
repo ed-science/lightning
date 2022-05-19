@@ -31,9 +31,8 @@ def _load(train_file, test_file, name):
 
     if test_file:
         return load_svmlight_files((train_file, test_file))
-    else:
-        X, y = load_svmlight_files((train_file,))
-        return X, y, None, None
+    X, y = load_svmlight_files((train_file,))
+    return X, y, None, None
 
 
 def _todense(data):
@@ -317,15 +316,16 @@ def get_loader(dataset):
 def load_dataset(dataset, group_all=False):
     ret = get_loader(dataset)()
 
-    if group_all and len(ret) > 2 and ret[2] is not None:
-        X_tr, y_tr, X_te, y_te = ret
-
-        if hasattr(X_tr, "tocsr"):
-            data = sp.vstack((X_tr, X_te)).tocsr()
-        else:
-            data = np.vstack((X_tr, X_te))
-        target = np.concatenate((y_tr, y_te))
-
-        return (data, target)
-    else:
+    if not group_all or len(ret) <= 2 or ret[2] is None:
         return ret[:2]
+    X_tr, y_tr, X_te, y_te = ret
+
+    data = (
+        sp.vstack((X_tr, X_te)).tocsr()
+        if hasattr(X_tr, "tocsr")
+        else np.vstack((X_tr, X_te))
+    )
+
+    target = np.concatenate((y_tr, y_te))
+
+    return (data, target)

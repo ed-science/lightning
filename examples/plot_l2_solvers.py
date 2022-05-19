@@ -119,7 +119,7 @@ for clf, name in ((clf1, "SVRG"),
     data[name] = (cb.times, np.array(cb.obj))
 
 # get best value
-fmin = min([np.min(a[1]) for a in data.values()])
+fmin = min(np.min(a[1]) for a in data.values())
 for name in data:
     plt.plot(data[name][0], data[name][1] - fmin, label=name, lw=3)
 

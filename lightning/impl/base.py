@@ -20,11 +20,7 @@ class BaseEstimator(_BaseEstimator):
         return RandomState(seed=self.random_state)
 
     def n_nonzero(self, percentage=False):
-        if hasattr(self, "coef_"):
-            coef = self.coef_
-        else:
-            coef = self.dual_coef_
-
+        coef = self.coef_ if hasattr(self, "coef_") else self.dual_coef_
         n_nz = np.sum(np.sum(coef != 0, axis=0, dtype=bool))
 
         if percentage:

@@ -16,6 +16,7 @@ an optimization problem using lightning's :class:`lightning.classification.Fista
 
 The 1D total variation is also known as fused lasso.
 """
+
 # Author: Fabian Pedregosa <f@bianp.net>
 
 import numpy as np
@@ -39,7 +40,7 @@ for penalty in ('l1', 'tv1d'):
     gs = GridSearchCV(clf, {'alpha': np.logspace(-3, 3, 10)})
     gs.fit(X, y)
     coefs = gs.best_estimator_.coef_
-    plt.plot(coefs.ravel(), label='%s penalty' % penalty, lw=3)
+    plt.plot(coefs.ravel(), label=f'{penalty} penalty', lw=3)
 
 plt.plot(ground_truth, lw=3, marker='^', markevery=5, markersize=10, label="ground truth")
 plt.grid()

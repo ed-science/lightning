@@ -131,6 +131,6 @@ class AdaGradRegressor(BaseRegressor, _BaseAdagrad):
 
     def fit(self, X, y):
         self.outputs_2d_ = len(y.shape) > 1
-        Y = y.reshape(-1, 1) if not self.outputs_2d_ else y
+        Y = y if self.outputs_2d_ else y.reshape(-1, 1)
         Y = Y.astype(np.float64)
         return self._fit(X, Y)
