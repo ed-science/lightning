@@ -241,10 +241,7 @@ class LinearSVR(BaseRegressor):
         rs = self._get_random_state()
 
         self.outputs_2d_ = len(y.shape) == 2
-        if self.outputs_2d_:
-            Y = y
-        else:
-            Y = y.reshape(-1, 1)
+        Y = y if self.outputs_2d_ else y.reshape(-1, 1)
         Y = np.asfortranarray(Y)
         n_vectors = Y.shape[1]
 

@@ -9,7 +9,7 @@ def project_simplex_bisection(v, z=1, tau=0.0001, max_iter=1000):
     upper = np.max(v)
     current = np.inf
 
-    for it in range(max_iter):
+    for _ in range(max_iter):
         if np.abs(current) / z < tau and current < 0:
             break
 

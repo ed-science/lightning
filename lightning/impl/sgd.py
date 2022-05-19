@@ -217,7 +217,7 @@ class SGDClassifier(BaseClassifier, _BaseSGD):
                             int(self.max_iter * n_samples), self.shuffle, rs,
                             self.callback, self.n_calls, self.verbose)
 
-        elif self.multiclass:
+        else:
             _multiclass_sgd(self, self.coef_, self.intercept_,
                             ds, y.astype(np.int32), loss, penalty,
                             self.alpha, self._get_learning_rate(),
@@ -226,9 +226,6 @@ class SGDClassifier(BaseClassifier, _BaseSGD):
                             int(self.max_iter * n_samples),
                             self.shuffle, rs, self.callback, self.n_calls,
                             self.verbose)
-
-        else:
-            raise ValueError("Wrong value for multiclass.")
 
         try:
             assert_all_finite(self.coef_)
@@ -348,10 +345,7 @@ class SGDRegressor(BaseRegressor, _BaseSGD):
         n_features = ds.get_n_features()
 
         self.outputs_2d_ = len(y.shape) == 2
-        if self.outputs_2d_:
-            Y = y
-        else:
-            Y = y.reshape(-1, 1)
+        Y = y if self.outputs_2d_ else y.reshape(-1, 1)
         Y = np.asfortranarray(Y)
         n_vectors = Y.shape[1]
         self.coef_ = np.zeros((n_vectors, n_features), dtype=np.float64)

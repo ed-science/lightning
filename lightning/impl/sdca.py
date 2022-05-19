@@ -23,11 +23,7 @@ class _BaseSDCA(object):
             y_bar = 1.0
 
         elif self.loss == "smooth_hinge":
-            if self.gamma < 1:
-                y_bar = 1 - 0.5 * self.gamma
-            else:
-                y_bar = 0.5 / self.gamma
-
+            y_bar = 1 - 0.5 * self.gamma if self.gamma < 1 else 0.5 / self.gamma
         else:
             raise ValueError("Unknown loss.")
 
@@ -193,6 +189,6 @@ class SDCARegressor(BaseRegressor, _BaseSDCA):
 
     def fit(self, X, y):
         self.outputs_2d_ = len(y.shape) > 1
-        Y = y.reshape(-1, 1) if not self.outputs_2d_ else y
+        Y = y if self.outputs_2d_ else y.reshape(-1, 1)
         Y = Y.astype(np.float64)
         return self._fit(X, Y)

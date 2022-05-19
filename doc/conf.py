@@ -16,12 +16,12 @@ import sphinx_bootstrap_theme
 # General information about the project.
 project = 'lightning'
 author = 'Mathieu Blondel'
-copyright = '{}, {}'.format(datetime.now().year, author)
+copyright = f'{datetime.now().year}, {author}'
 
 # The full version, including alpha/beta/rc tags.
 try:
     from lightning import __version__
-except (ImportError, ModuleNotFoundError) as e:
+except ImportError as e:
     raise ImportError(
         f"You must install '{project}' package itself to build docs for it"
     ) from e
